@@ -23,15 +23,19 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-	dir('ApiGateways/OcelotApiGw/')
+	dir('Jenkins_File')
 	{	
 	sh 'pwd'
-	docker build -t microservice-ApiGateways-OcelotApiGw .
+	docker-compose build 
       	}
     }
     stage('Deploy') {
       steps {
-        sh "echo Deploy"
+	dir('Jenkins_File')
+        {
+	        docker-compose run
+        }
+	}	
       }
     }
   }
