@@ -1,0 +1,38 @@
+pipeline {
+  agent any
+  triggers {
+    GenericTrigger(
+     genericVariables: [
+      [key: 'ref', value: '$.ref']
+     ],
+
+     causeString: 'Triggered on $ref',
+
+     token: 'NEW_PIPE',
+     tokenCredentialId: '',
+
+     printContributedVariables: true,
+     printPostContent: true,
+
+     silentResponse: false,
+
+     regexpFilterText: 'refs/heads/develop',
+     regexpFilterExpression: 'refs/heads/' + BRANCH_NAME
+    )
+  }
+  stages {
+    stage('Build') {
+      steps {
+	dir('ApiGateways/OcelotApiGw/')
+	{	
+	sh 'pwd'
+	docker build -t microservice-ApiGateways-OcelotApiGw .
+      	}
+    }
+    stage('Deploy') {
+      steps {
+        sh "echo Deploy"
+      }
+    }
+  }
+}
